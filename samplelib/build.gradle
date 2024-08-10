@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'cn.hikyson.methodcanary.samplelib'
     compileSdkVersion 28
 
     defaultConfig {

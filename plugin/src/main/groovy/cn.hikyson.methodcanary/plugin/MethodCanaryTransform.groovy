@@ -4,7 +4,6 @@ import com.android.build.api.transform.QualifiedContent
 import com.android.build.api.transform.Transform
 import com.android.build.api.transform.TransformException
 import com.android.build.api.transform.TransformInvocation
-import com.android.build.gradle.internal.pipeline.TransformManager
 import org.gradle.api.Project
 
 public class MethodCanaryTransform extends Transform {

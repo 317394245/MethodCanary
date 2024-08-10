@@ -27,41 +27,41 @@ class MyApp : Application() {
         MethodCanary.get().enableLog(true);
         MethodCanary.get().addOnPageLifecycleEventCallback { lifecycleMethodEvent, page ->
             if (lifecycleMethodEvent.isEnter) {
-//                Logger.d(
-//                    "[%s] %s start",
-//                    page.javaClass.name + page.hashCode() + "|" + lifecycleMethodEvent.className,
-//                    lifecycleMethodEvent.methodName
-//                )
+                Logger.d(
+                    "[%s] %s start",
+                    page.javaClass.name + page.hashCode() + "|" + lifecycleMethodEvent.className,
+                    lifecycleMethodEvent.methodName
+                )
             } else {
-//                Logger.d(
-//                    "[%s] %s cost %s ms",
-//                    page.javaClass.name + page.hashCode() + "|" + lifecycleMethodEvent.className,
-//                    lifecycleMethodEvent.methodName,
-//                    (lifecycleMethodEvent.eventNanoTime - lifecycleMethodEvent.pairMethodEvent.eventNanoTime) / 1000000
-//                )
+                Logger.d(
+                    "[%s] %s cost %s ms",
+                    page.javaClass.name + page.hashCode() + "|" + lifecycleMethodEvent.className,
+                    lifecycleMethodEvent.methodName,
+                    (lifecycleMethodEvent.eventTimeMillis - lifecycleMethodEvent.pairMethodEvent.eventTimeMillis) / 1000000
+                )
             }
         }
         this.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-            override fun onActivityPaused(activity: Activity?) {
+
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             }
 
-            override fun onActivityResumed(activity: Activity?) {
+            override fun onActivityStarted(activity: Activity) {
             }
 
-            override fun onActivityStarted(activity: Activity?) {
+            override fun onActivityResumed(activity: Activity) {
             }
 
-            override fun onActivityDestroyed(activity: Activity?) {
+            override fun onActivityPaused(activity: Activity) {
             }
 
-            override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
+            override fun onActivityStopped(activity: Activity) {
             }
 
-            override fun onActivityStopped(activity: Activity?) {
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
             }
 
-            override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-                // activity.onCreated start -> activity.super.onCreated -> onActivityCreated -> activity.onCreated end
+            override fun onActivityDestroyed(activity: Activity) {
             }
         })
     }

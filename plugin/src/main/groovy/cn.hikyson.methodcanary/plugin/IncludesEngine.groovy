@@ -5,7 +5,6 @@ import org.gradle.api.Project
 import javax.script.Invocable
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
-import org.apache.commons.io.FileUtils
 
 class IncludesEngine implements IInExcludes {
     private ScriptEngine mJsEngine

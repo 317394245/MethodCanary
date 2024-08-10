@@ -1,15 +1,11 @@
 package cn.hikyson.methodcanary.plugin
 
-import com.android.build.api.transform.DirectoryInput
-import com.android.build.api.transform.Format
-import com.android.build.api.transform.JarInput
-import com.android.build.api.transform.TransformInput
-import com.android.build.api.transform.TransformInvocation
-import com.android.build.api.transform.TransformOutputProvider
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.gradle.api.Project
+import org.gradle.api.file.Directory
+import org.gradle.api.file.RegularFile
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
@@ -25,15 +21,15 @@ public class TransformHandler {
      * @param project
      * @param transformInvocation
      */
-    static void handle(Project project, TransformInvocation transformInvocation) {
-        Collection<TransformInput> inputs = transformInvocation.inputs
-        if (inputs == null) {
-            project.logger.quiet("[AndroidGodEye][MethodCanary] TransformHandler handle: inputs == null")
-            return
-        }
-        TransformOutputProvider outputProvider = transformInvocation.outputProvider
-        if (outputProvider != null) {
-            outputProvider.deleteAll()
+    static void handle(Project project, MethodCanaryTask methodCanaryTask) {
+//        Collection<TransformInput> inputs = methodCanaryTask.inputs
+//        if (inputs == null) {
+//            project.logger.quiet("[AndroidGodEye][MethodCanary] TransformHandler handle: inputs == null")
+//            return
+//        }
+        File outputFile = methodCanaryTask.output.get().asFile
+        if (outputFile != null) {
+            outputFile.deleteOnExit()
 //            project.logger.quiet("[MethodCanary] TransformHandler handle: outputProvider.deleteAll")
         }
         FileUtils.forceDeleteOnExit(FileUtil.outputResult(project))
@@ -42,21 +38,21 @@ public class TransformHandler {
         project.logger.quiet("[AndroidGodEye][MethodCanary] AndroidGodEyeExtension: " + androidGodEyeExtension)
         IncludesEngine includesEngine = new IncludesEngine(project, androidGodEyeExtension)
         project.logger.quiet("[AndroidGodEye][MethodCanary] Inject start.")
-        inputs.each { TransformInput input ->
-            input.directoryInputs.each { DirectoryInput directoryInput ->
-                handleDirectoryInput(project, directoryInput, outputProvider, androidGodEyeExtension, includesEngine, result)
+//        inputs.each { TransformInput input ->
+        methodCanaryTask.allDirectories.each { Directory directoryInput ->
+                handleDirectoryInput(project, directoryInput, outputFile, androidGodEyeExtension, includesEngine, result)
             }
-            input.jarInputs.each { JarInput jarInput ->
-                handleJarInputs(project, jarInput, outputProvider, androidGodEyeExtension, includesEngine, result)
+        methodCanaryTask.allJars.each { RegularFile jarInput ->
+                handleJarInputs(project, jarInput, outputFile, androidGodEyeExtension, includesEngine, result)
             }
-        }
+//        }
         project.logger.quiet("[AndroidGodEye][MethodCanary] Inject end.")
         project.logger.quiet("[AndroidGodEye][MethodCanary] Generate result start.")
         FileUtils.writeStringToFile(FileUtil.outputResult(project), result.toString(), "utf-8", false)
         project.logger.quiet(String.format("[AndroidGodEye][MethodCanary] Generate result end: %s", FileUtil.outputResult(project).absolutePath))
     }
 
-    static void handleDirectoryInput(Project project, DirectoryInput directoryInput, TransformOutputProvider outputProvider, AndroidGodEyeExtension androidGodEyeExtension, IncludesEngine includesEngine, StringBuilder result) {
+    static void handleDirectoryInput(Project project, Directory directoryInput, File outputFile, AndroidGodEyeExtension androidGodEyeExtension, IncludesEngine includesEngine, StringBuilder result) {
         if (directoryInput.file.isDirectory()) {
             directoryInput.file.eachFileRecurse { File file ->
                 if (file.name.endsWith(".class")) {
@@ -75,13 +71,11 @@ public class TransformHandler {
                 }
             }
         }
-        def dest = outputProvider.getContentLocation(directoryInput.name,
-                directoryInput.contentTypes, directoryInput.scopes,
-                Format.DIRECTORY)
+        def dest = new File(outputFile, directoryInput.asFile.name)
         FileUtils.copyDirectory(directoryInput.file, dest)
     }
 
-    static void handleJarInputs(Project project, JarInput jarInput, TransformOutputProvider outputProvider, AndroidGodEyeExtension androidGodEyeExtension, IncludesEngine includesEngine, StringBuilder result) {
+    static void handleJarInputs(Project project, RegularFile jarInput, File outputFile, AndroidGodEyeExtension androidGodEyeExtension, IncludesEngine includesEngine, StringBuilder result) {
         if (jarInput.file.getAbsolutePath().endsWith(".jar")) {
             def jarName = jarInput.name
             def md5Name = DigestUtils.md5Hex(jarInput.file.getAbsolutePath())
@@ -118,8 +112,7 @@ public class TransformHandler {
             }
             jarOutputStream.close()
             jarFile.close()
-            def dest = outputProvider.getContentLocation(jarName + md5Name,
-                    jarInput.contentTypes, jarInput.scopes, Format.JAR)
+            def dest = new File(outputFile, jarName + md5Name+".jar")
             FileUtils.copyFile(tmpFile, dest)
             tmpFile.delete()
         }

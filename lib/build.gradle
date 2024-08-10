@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'cn.hikyson.methodcanary.lib'
     compileSdkVersion 28
 
 
@@ -34,4 +35,4 @@ dependencies {
 //    implementation 'com.orhanobut:logger:2.2.0'
 }
 
-apply from: rootProject.file('gradle/androidlibrary-jcenter-push.gradle')
+//apply from: rootProject.file('gradle/androidlibrary-jcenter-push.gradle')
