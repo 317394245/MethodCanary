@@ -15,7 +15,7 @@ class MethodCanaryMethodVisitor(
     val includesEngine: IncludesEngine,
     val result: StringBuilder
 ) : AdviceAdapter(
-    Opcodes.ASM6, mv, methodInfo.access, methodInfo.name, methodInfo.desc
+    Opcodes.ASM9, mv, methodInfo.access, methodInfo.name, methodInfo.desc
 ) {
 
     override  fun  onMethodEnter() {

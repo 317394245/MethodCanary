@@ -6,6 +6,7 @@ import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
@@ -16,7 +17,7 @@ abstract class MethodCanaryTask: DefaultTask() {
 
     @get:InputFiles abstract val inputDirs: ListProperty<Directory>
 
-    @get:OutputFile
+    @get:OutputDirectory
     abstract val output: RegularFileProperty
 
     @TaskAction

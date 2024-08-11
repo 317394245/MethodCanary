@@ -14,9 +14,9 @@ dependencies {
     compileOnly(libs.android.gradlePlugin.api)
     implementation(gradleKotlinDsl())
 
-    implementation( "org.ow2.asm:asm:7.1")
-    implementation( "org.ow2.asm:asm-commons:7.1")
-    implementation( "org.ow2.asm:asm-util:7.1")
+    implementation( "org.ow2.asm:asm:9.2")
+    implementation( "org.ow2.asm:asm-commons:9.2")
+    implementation( "org.ow2.asm:asm-util:9.2")
     implementation( "commons-io:commons-io:2.11.0")
     implementation ( "commons-codec:commons-codec:1.17.1")
 }

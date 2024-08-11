@@ -5,13 +5,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 //if (!Boolean.parseBoolean(DISABLE_PLUGIN)) {
-    apply plugin: 'cn.hikyson.methodcanary.plugin'
-    AndroidGodEye {
-        enableLifecycleTracer true
-        enableMethodTracer true
-        instrumentationRuleFilePath "AndroidGodEye-MethodCanary.js"
-        instrumentationRuleIncludeClassNamePrefix(["cn/hikyson/methodcanary/sample"])
-    }
+//    apply plugin: 'cn.hikyson.methodcanary.plugin'
+//    AndroidGodEye {
+//        enableLifecycleTracer true
+//        enableMethodTracer true
+//        instrumentationRuleFilePath "AndroidGodEye-MethodCanary.js"
+//        instrumentationRuleIncludeClassNamePrefix(["cn/hikyson/methodcanary/sample"])
+//    }
 //}
 
 android {

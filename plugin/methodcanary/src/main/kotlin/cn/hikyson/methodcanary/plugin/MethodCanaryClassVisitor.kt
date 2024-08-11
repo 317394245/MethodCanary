@@ -8,7 +8,7 @@ import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
 class MethodCanaryClassVisitor(project: Project, classReader: ClassReader, cv: ClassVisitor, androidGodEyeExtension: AndroidGodEyeExtension, includesEngine: IncludesEngine, result: StringBuilder ): ClassVisitor(
-    Opcodes.ASM6, cv) {
+    Opcodes.ASM9, cv) {
 
     var  mProject:Project
     var  mIncludesEngine:IncludesEngine
@@ -26,7 +26,7 @@ class MethodCanaryClassVisitor(project: Project, classReader: ClassReader, cv: C
         this.mClassReader = classReader
     }
 
-    override fun visit(version: Int, access: Int,  name:String,  signature:String,  superName:String, interfaces:Array<String>) {
+    override fun visit(version: Int, access: Int,  name:String,  signature:String?,  superName:String, interfaces:Array<String>) {
         super.visit(version, access, name, signature, superName, interfaces)
         this.mClassInfo.access = access
         this.mClassInfo.name = name
@@ -35,7 +35,7 @@ class MethodCanaryClassVisitor(project: Project, classReader: ClassReader, cv: C
 //        this.mProject.logger.quiet("[MethodCanary] ClassVisitor visit class " + String.valueOf(this.mClassInfo))
     }
 
-    override  fun visitMethod(access: Int,  name:String,  desc: String, signature:String, exceptions: Array<String>): MethodVisitor {
+    override  fun visitMethod(access: Int,  name:String,  desc: String, signature:String?, exceptions: Array<String>?): MethodVisitor {
         var methodInfo = MethodInfo(access, name, desc)
 //        this.mProject.logger.quiet("[MethodCanary] ClassVisitor visit method " + String.valueOf(methodInfo) + " " + String.valueOf(this.mClassInfo))
         var methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions)

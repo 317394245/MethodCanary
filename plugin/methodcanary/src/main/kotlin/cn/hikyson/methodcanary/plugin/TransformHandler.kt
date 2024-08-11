@@ -29,10 +29,10 @@ object TransformHandler {
 //            return
 //        }
         var outputFile = methodCanaryTask.output.get().asFile
-        if (outputFile != null) {
-            outputFile.deleteOnExit()
+//        if (outputFile != null) {
+//            outputFile.deleteOnExit()
 //            project.logger.quiet("[MethodCanary] TransformHandler handle: outputProvider.deleteAll")
-        }
+//        }
         FileUtils.forceDeleteOnExit(FileUtil.outputResult(project))
         var result = StringBuilder()
         var androidGodEyeExtension = project.getExtensions().getByType(AndroidGodEyeExtension::class.java)
@@ -73,6 +73,7 @@ object TransformHandler {
             }
         }
         var dest = File(outputFile, directoryInput.asFile.name)
+        dest.createNewFile()
         FileUtils.copyDirectory(directoryInput.asFile, dest)
     }
 
@@ -114,6 +115,7 @@ object TransformHandler {
             jarOutputStream.close()
             jarFile.close()
             var dest = File(outputFile, jarName + md5Name+".jar")
+            dest.createNewFile()
             FileUtils.copyFile(tmpFile, dest)
             tmpFile.delete()
         }
