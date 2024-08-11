@@ -1,14 +1,15 @@
 package cn.hikyson.methodcanary.plugin
 
+import java.util.Arrays
 
-public class ClassInfo {
-    public int access
-    public String name
-    public String superName
-    public String[] interfaces
+class ClassInfo {
+    var access: Int = 0
+    var  name:String = ""
+    var  superName :String = ""
+    var  interfaces: Array<String> = arrayOf()
 
-    @Override
-    public String toString() {
+
+    override fun toString(): String {
         return "ClassInfo{" +
                 "access=" + access +
                 ", name='" + name + '\'' +
